@@ -1,6 +1,7 @@
 from slack import WebClient
 from slackeventsapi import SlackEventAdapter
 import json
+"""this file contains the connection to Slack API using various keys"""
 
 def slack_connection(app):
     with open("secret.json", "r") as f:
@@ -18,8 +19,3 @@ def slack_connection(app):
     # response = slack_client.chat_postMessage(channel='#random', text="Hello, world!")
     # assert response["ok"]
     # assert response["message"]["text"] == "Hello, world!"
-
-
-
-# if __name__=="__main__":
-#     slack_connection()
