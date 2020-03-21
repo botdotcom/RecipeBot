@@ -17,7 +17,7 @@ def recipes_by_ingredients(ingredients):
 
     url = "https://api.spoonacular.com/recipes/findByIngredients?" \
           "ingredients={}" \
-          "&number=3&limitLicense=true&ranking=1&ignorePantry=true" \
+          "&number=1&limitLicense=true&ranking=1&ignorePantry=true" \
           "&apiKey={}".format(make_param, key['spoon_key'])
 
     response = requests.get(url)

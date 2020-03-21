@@ -13,6 +13,12 @@ def slack_connection(app):
     return [slack_client, slack_event_adapter]
 
 
+def bot_response(slack_client, title, url, channel):
+    # composed_text = "Try out this recipe:\n{} -- {}".format(title, url)
+    composed_text = "Try out this recipe:\n{}".format(url)
+    response = slack_client.chat_postMessage(channel=channel, text=composed_text)
+
+
 # check slack connection initially
 # def slack_connection():
     # tester code to check if python (no Flask) and slack connected

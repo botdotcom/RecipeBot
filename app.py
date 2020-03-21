@@ -3,14 +3,16 @@ from flask_ngrok import run_with_ngrok
 import json
 import service as sv
 import slackrecipebot as srb
+"""this file contains the flask endpoints"""
+
 
 # this is the main flask app with my endpoints
 app = Flask(__name__)
 # added additional URL
 run_with_ngrok(app)
 
-# Slack events adapter
-slack_event_adapter = srb.slack_connection(app)[1]
+# Slack events adapter etc
+slack_client, slack_event_adapter = srb.slack_connection(app)
 
 # endpoints for slack
 # simple slack endpoint to read message when bot is mentioned
@@ -21,15 +23,25 @@ def user_message(payload):
     user_id = event.get("user")
     text = event.get("text")
     message = text.split(" ")
-    # print(message)
+    # for sending to slack
+    url = ""
+    title = ""
+
     if message[1] == "ingredient" or message[1] == "ingredients":
         ingredients = message[2:]
-        # print(ingredients)
         recipes = make_recipe_by_ingredients(ingredients)
-        # print(recipes)
+        # currently retrieving only 1 recipe
+        rid = recipes[0]["id"]
+        recipe = make_recipe_by_id(rid)
+        url = recipe["sourceUrl"]
+        # title = recipe["sourceName"]
+
     if message[1] == "random":
         recipe = make_random_recipe()
-        print(recipe)
+        url = recipe["recipes"][0]["sourceUrl"]
+        # title = recipe["recipes"][0]["sourceName"]
+
+    srb.bot_response(slack_client, title, url, channel_id)
     return render_template("home.html") #temp
 
 
@@ -68,15 +80,19 @@ def get_random_recipes():
 # pass list of ingredients to API and get recipes in return
 def make_recipe_by_ingredients(ingredients):
     response = sv.recipes_by_ingredients(ingredients)
-    recipes = json.dumps(response.json(), indent=2)
-    return recipes
+    return response.json()
 
 
 # call to get a random recipe function
 def make_random_recipe():
     response = sv.random_recipes()
-    recipe = json.dumps(response.json(), indent=2)
-    return recipe
+    return response.json()
+
+
+# get complete recipe information from recipe id fetched earlier
+def make_recipe_by_id(recipe_id):
+    response = sv.recipe_information_by_id(recipe_id)
+    return response.json()
 
 
 if __name__ == "__main__":
