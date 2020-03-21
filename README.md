@@ -4,7 +4,7 @@ This is an extension of my another project 'KitchenCompanion', where I get recip
 
 I am building a Slack bot `@recipebot` that responds with a recipe when called in a workspace.
 
-### Usage
+### Usage:
 
 NOTE: Add your own API authentication keys in `secret.json` file before running this app.
 
@@ -20,7 +20,7 @@ OR
 @recipebot ingredients mango
 ```
 
-For a list of ingredients, you can message as:
+For more than one ingredient, you can message as:
 
 ```
 @recipebot ingredient tomato olives
@@ -37,3 +37,7 @@ To just get any random recipe, message as:
 ```
 @recipebot random
 ```
+
+#### Future work:
+1. Recipebot only responds to above messages. I want to make it more life-like so that it can respond to something like `hey @recipebot, can you get me a cool salad recipe?` I hope to do it with something like DialogFlow.
+2. Needless to say, this slack bot only makes use of `app_mention` slack event and `chat.postMessage` slack method for now. I want to add more ways communication to this bot in slack.
