@@ -31,3 +31,9 @@ OR
 ```
 @recipebot ingredients tomato olives
 ```
+
+To just get any random recipe, message as:
+
+```
+@recipebot random
+```

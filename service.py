@@ -22,18 +22,6 @@ def recipes_by_ingredients(ingredients):
     response = requests.get(url)
     return response
 
-# not working
-def related_recipes(recipe_id):
-    with open("secret.json", "r") as f:
-        key = json.load(f)
-
-    url = "https://api.spoonacular.com/recipes/{}" \
-          "/similar" \
-          "&apiKey={}".format(recipe_id, key['spoon_key'])
-
-    response = requests.get(url)
-    return response
-
 
 def random_recipes():
     with open("secret.json", "r") as f:

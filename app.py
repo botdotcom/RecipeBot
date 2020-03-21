@@ -10,10 +10,6 @@ app = Flask(__name__)
 run_with_ngrok(app)
 
 # Slack events adapter
-# with open("secret.json", "r") as f:
-#     token = json.load(f)
-
-# slack_event_adapter = SlackEventAdapter(token['slack_signing_secret'], "/slack/events", app)
 slack_event_adapter = srb.slack_connection(app)[1]
 
 # endpoints for slack
@@ -30,7 +26,10 @@ def user_message(payload):
         ingredients = message[2:]
         # print(ingredients)
         recipes = make_recipe_by_ingredients(ingredients)
-        print(recipes)
+        # print(recipes)
+    if message[1] == "random":
+        recipe = make_random_recipe()
+        print(recipe)
     return render_template("home.html") #temp
 
 
@@ -49,7 +48,7 @@ def default():
 
 
 # get recipes from list of ingredients
-@app.route('/recipes/ingredients', methods=['GET'])
+@app.route('/recipes/ingredients')
 def get_recipes_by_ingredients():
     ingredients = request.args.getlist('items')
     recipes = make_recipe_by_ingredients(ingredients)   # DRY
@@ -57,20 +56,10 @@ def get_recipes_by_ingredients():
     return render_template("searchresults.html")
 
 
-# get recipes related to the current recipe (by id)
-@app.route('/recipes/<recipeid>/related')
-def get_related_recipes(recipeid):
-    response = sv.related_recipes(recipeid)
-    recipes = json.dumps(response.json())
-    # print(recipes)
-    return render_template("searchresults.html")
-
-
 # get a random recipe
 @app.route('/recipes/random')
 def get_random_recipes():
-    response = sv.random_recipes()
-    recipes = json.dumps(response.json())
+    recipes = make_random_recipe()  # DRY
     print(recipes)
     return render_template("searchresults.html")
 
@@ -81,6 +70,13 @@ def make_recipe_by_ingredients(ingredients):
     response = sv.recipes_by_ingredients(ingredients)
     recipes = json.dumps(response.json(), indent=2)
     return recipes
+
+
+# call to get a random recipe function
+def make_random_recipe():
+    response = sv.random_recipes()
+    recipe = json.dumps(response.json(), indent=2)
+    return recipe
 
 
 if __name__ == "__main__":
