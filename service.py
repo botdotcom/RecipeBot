@@ -3,7 +3,7 @@ import json
 # this file contains the actual calls to Spoonacular API
 
 def recipes_by_ingredients(ingredients):
-    with open("api.json", "r") as f:
+    with open("secret.json", "r") as f:
         key = json.load(f)
 
     # prepare the parameters to put in the url
@@ -17,31 +17,31 @@ def recipes_by_ingredients(ingredients):
     url = "https://api.spoonacular.com/recipes/findByIngredients?" \
           "ingredients={}" \
           "&number=5&limitLicense=true&ranking=1&ignorePantry=true" \
-          "&apiKey={}".format(make_param, key['key'])
+          "&apiKey={}".format(make_param, key['spoon_key'])
 
     response = requests.get(url)
     return response
 
 # not working
 def related_recipes(recipe_id):
-    with open("api.json", "r") as f:
+    with open("secret.json", "r") as f:
         key = json.load(f)
 
     url = "https://api.spoonacular.com/recipes/{}" \
           "/similar" \
-          "&apiKey={}".format(recipe_id, key['key'])
+          "&apiKey={}".format(recipe_id, key['spoon_key'])
 
     response = requests.get(url)
     return response
 
 
 def random_recipes():
-    with open("api.json", "r") as f:
+    with open("secret.json", "r") as f:
         key = json.load(f)
 
     url = "https://api.spoonacular.com/recipes" \
           "/random?number=1" \
-          "&apiKey={}".format(key['key'])
+          "&apiKey={}".format(key['spoon_key'])
 
     response = requests.get(url)
     return response
